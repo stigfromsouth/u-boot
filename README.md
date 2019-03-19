@@ -1,10 +1,11 @@
+```
 # SPDX-License-Identifier: GPL-2.0+
 #
 # (C) Copyright 2000 - 2013
 # Wolfgang Denk, DENX Software Engineering, wd@denx.de.
+```
+*Summary*
 
-Summary:
-========
 
 This directory contains the source code for U-Boot, a boot loader for
 Embedded boards based on PowerPC, ARM, MIPS and several other
@@ -25,8 +26,8 @@ code (for instance hardware test utilities) to the monitor, you can
 load and run it dynamically.
 
 
-Status:
-=======
+*Status*
+
 
 In general, all boards for which a configuration option exists in the
 Makefile have been tested to some extent and can be considered
@@ -41,11 +42,11 @@ Note: As of August, 2010, there is no longer a CHANGELOG file in the
 actual U-Boot source tree; however, it can be created dynamically
 from the Git log using:
 
-	make CHANGELOG
+	`make CHANGELOG`
 
 
-Where to get help:
-==================
+*Where to get help*:
+
 
 In case you have questions about, problems with or contributions for
 U-Boot, you should send a message to the U-Boot mailing list at
@@ -55,8 +56,8 @@ Please see http://lists.denx.de/pipermail/u-boot and
 http://dir.gmane.org/gmane.comp.boot-loaders.u-boot
 
 
-Where to get source code:
-=========================
+*Where to get source code*:
+
 
 The U-Boot source code is maintained in the Git repository at
 git://www.denx.de/git/u-boot.git ; you can browse it online at
@@ -71,8 +72,7 @@ Pre-built (and tested) images are available from
 ftp://ftp.denx.de/pub/u-boot/images/
 
 
-Where we come from:
-===================
+*Where we come from*:
 
 - start from 8xxrom sources
 - create PPCBoot project (http://sourceforge.net/projects/ppcboot)
@@ -90,8 +90,7 @@ Where we come from:
 - current project page: see http://www.denx.de/wiki/U-Boot
 
 
-Names and Spelling:
-===================
+*Names and Spelling*:
 
 The "official" name of this project is "Das U-Boot". The spelling
 "U-Boot" shall be used in all written text (documentation, comments
@@ -100,20 +99,19 @@ in source files etc.). Example:
 	This is the README file for the U-Boot project.
 
 File names etc. shall be based on the string "u-boot". Examples:
-
+```
 	include/asm-ppc/u-boot.h
 
 	#include <asm/u-boot.h>
-
+```
 Variable names, preprocessor constants etc. shall be either based on
 the string "u_boot" or on "U_BOOT". Example:
-
+```
 	U_BOOT_VERSION		u_boot_logo
 	IH_OS_U_BOOT		u_boot_hush_start
+```
 
-
-Versioning:
-===========
+*Versioning*:
 
 Starting with the release in October 2008, the names of the releases
 were changed from numerical release numbers without deeper meaning
@@ -128,8 +126,8 @@ Examples:
 	U-Boot v2010.09-rc1 - Release candidate 1 for September 2010 release
 
 
-Directory Hierarchy:
-====================
+*Directory Hierarchy*:
+
 
 /arch			Architecture specific files
   /arc			Files generic to ARC architecture
@@ -165,8 +163,8 @@ Directory Hierarchy:
 /test			Various unit test files
 /tools			Tools to build S-Record or U-Boot images, etc.
 
-Software Configuration:
-=======================
+*Software Configuration*:
+
 
 Configuration is usually done using C preprocessor defines; the
 rationale behind that is to avoid dead code whenever possible.
@@ -189,8 +187,7 @@ allowing you to use the "make menuconfig" command to configure your
 build.
 
 
-Selection of Processor Architecture and Board Type:
----------------------------------------------------
+### Selection of Processor Architecture and Board Type:
 
 For all supported boards there are ready-to-use default
 configurations available; just type "make <board_name>_defconfig".
@@ -204,8 +201,8 @@ Note: If you're looking for the default configuration file for a board
 you're sure used to be there but is now missing, check the file
 doc/README.scrapyard for a list of no longer supported boards.
 
-Sandbox Environment:
---------------------
+*Sandbox Environment*:
+
 
 U-Boot can be built natively to run on a Linux host using the 'sandbox'
 board. This allows feature development which is not board- or architecture-
@@ -215,8 +212,8 @@ run some of U-Boot's tests.
 See board/sandbox/README.sandbox for more details.
 
 
-Board Initialisation Flow:
---------------------------
+*Board Initialisation Flow*:
+
 
 This is the intended start-up flow for boards. This should apply for both
 SPL and U-Boot proper (i.e. they both follow the same rules).
