@@ -1,11 +1,9 @@
 ## Summary
-=======
 
 This document covers various features of the 'am335x_evm' build, and some of
 the related build targets (am335x_evm_uartN, etc).
 
 ## Hardware
-========
 
 The binary produced by this board supports, based on parsing of the EEPROM
 documented in TI's reference designs:
@@ -15,7 +13,6 @@ documented in TI's reference designs:
 - Beaglebone Black
 
 ### Customization
-=============
 
 Given that all of the above boards are reference platforms (and the
 Beaglebone platforms are OSHA), it is likely that this platform code and
@@ -41,7 +38,6 @@ the IP blocks, so both areas will need their choices updated to reflect
 the custom design.
 
 ### NAND
-====
 
 The AM335x GP EVM ships with a 256MiB NAND available in most profiles.  In
 this example to program the NAND we assume that an SD card has been
@@ -85,7 +81,6 @@ Step-3: Set BOOTSEL pin to select NAND boot, and POR the device.
 	The device should boot from images flashed on NAND device.
 
 ### NOR
-===
 
 The Beaglebone White can be equipped with a "memory cape" that in turn can
 have a NOR module plugged into it.  In this case it is then possible to
@@ -108,7 +103,6 @@ U-Boot # erase 08000000 +80000
 U-Boot # cp.b ${loadaddr} 08000000 ${filesize}
 ```
 ### Falcon Mode
-===========
 
 The default build includes "Falcon Mode" (see doc/README.falcon) via NAND,
 eMMC (or raw SD cards) and FAT SD cards.  Our default behavior currently is
@@ -120,10 +114,9 @@ boards with multiple boot methods, recovery should not be an issue in this
 worst-case however.
 
 ### Falcon Mode: eMMC
-=================
 
 The recommended layout in this case is:
-
+```
 MMC BLOCKS      |--------------------------------| LOCATION IN BYTES
 0x0000 - 0x007F : MBR or GPT table               : 0x000000 - 0x020000
 0x0080 - 0x00FF : ARGS or FDT file               : 0x010000 - 0x020000
@@ -132,7 +125,7 @@ MMC BLOCKS      |--------------------------------| LOCATION IN BYTES
 0x0300 - 0x06FF : U-Boot                         : 0x060000 - 0x0e0000
 0x0700 - 0x08FF : U-Boot Env + Redundant         : 0x0e0000 - 0x120000
 0x0900 - 0x28FF : Kernel                         : 0x120000 - 0x520000
-
+```
 Note that when we run 'spl export' it will prepare to boot the kernel.
 This includes relocation of the uImage from where we loaded it to the entry
 point defined in the header.  As these locations overlap by default, it
@@ -166,7 +159,6 @@ U-Boot # mmc write ${fdtaddr} 80 80
 U-Boot # mmc write 81000000 900 2000
 ```
 ### Falcon Mode: FAT SD cards
-=========================
 
 In this case the additional file is written to the filesystem.  In this
 example we assume that the uImage and device tree to be used are already on
@@ -190,7 +182,6 @@ So then you:
 `U-Boot # fatwrite mmc 0:1 0x80f80000 args 8928`
 
 ### Falcon Mode: NAND
-=================
 
 In this case the additional data is written to another partition of the
 NAND.  In this example we assume that the uImage and device tree to be are
