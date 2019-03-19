@@ -1,10 +1,10 @@
-Summary
+## Summary
 =======
 
 This document covers various features of the 'am335x_evm' build, and some of
 the related build targets (am335x_evm_uartN, etc).
 
-Hardware
+## Hardware
 ========
 
 The binary produced by this board supports, based on parsing of the EEPROM
@@ -14,7 +14,7 @@ documented in TI's reference designs:
 - Beaglebone White
 - Beaglebone Black
 
-Customization
+### Customization
 =============
 
 Given that all of the above boards are reference platforms (and the
@@ -40,7 +40,7 @@ note that all of the SPL options are grouped together, rather than with
 the IP blocks, so both areas will need their choices updated to reflect
 the custom design.
 
-NAND
+### NAND
 ====
 
 The AM335x GP EVM ships with a 256MiB NAND available in most profiles.  In
@@ -58,6 +58,7 @@ Step-1: Building u-boot for NAND boot
 	CONFIG_NAND_OMAP_ECCSCHEME	(refer doc/README.nand)
 
 Step-2: Flashing NAND via MMC/SD
+```
 	# select BOOTSEL to MMC/SD boot and boot from MMC/SD card
 	U-Boot # mmc rescan
 	# erase flash
@@ -79,11 +80,11 @@ Step-2: Flashing NAND via MMC/SD
 	# flash filesystem image
 	U-Boot # load mmc 0 0x82000000 filesystem.img
 	U-Boot # nand write 0x82000000 ${loadaddress} 0x300000
-
+```
 Step-3: Set BOOTSEL pin to select NAND boot, and POR the device.
 	The device should boot from images flashed on NAND device.
 
-NOR
+### NOR
 ===
 
 The Beaglebone White can be equipped with a "memory cape" that in turn can
@@ -99,14 +100,14 @@ binary must be written to the start of NOR, with no header or similar
 prepended.  In the following example we use a size of 512KiB (0x80000)
 as that is how much space we set aside before the environment, as per
 the config file.
-
+```
 U-Boot # mmc rescan
 U-Boot # load mmc 0 ${loadaddr} u-boot.bin
 U-Boot # protect off 08000000 +80000
 U-Boot # erase 08000000 +80000
 U-Boot # cp.b ${loadaddr} 08000000 ${filesize}
-
-Falcon Mode
+```
+### Falcon Mode
 ===========
 
 The default build includes "Falcon Mode" (see doc/README.falcon) via NAND,
@@ -118,7 +119,7 @@ be taken by the user to not 'brick' their setup.  As these are all eval
 boards with multiple boot methods, recovery should not be an issue in this
 worst-case however.
 
-Falcon Mode: eMMC
+### Falcon Mode: eMMC
 =================
 
 The recommended layout in this case is:
@@ -143,7 +144,7 @@ been run to select the correct device.  Also note that if you previously
 had a FAT partition (such as on a Beaglebone Black) it is not enough to
 write garbage into the area, you must delete it from the partition table
 first.
-
+```
 # Ensure we are able to talk with this mmc device
 U-Boot # mmc rescan
 U-Boot # tftp 81000000 am335x/MLO
@@ -163,8 +164,8 @@ U-Boot # spl export fdt 81000000 - ${fdtaddr}
 U-Boot # mmc write ${fdtaddr} 80 80
 # Write the uImage to MMC
 U-Boot # mmc write 81000000 900 2000
-
-Falcon Mode: FAT SD cards
+```
+### Falcon Mode: FAT SD cards
 =========================
 
 In this case the additional file is written to the filesystem.  In this
@@ -172,7 +173,7 @@ example we assume that the uImage and device tree to be used are already on
 the FAT filesystem (only the uImage MUST be for this to function
 afterwards) along with a Falcon Mode aware MLO and the FAT partition has
 already been created and marked bootable:
-
+```
 U-Boot # mmc rescan
 # Load kernel and device tree into memory, perform export
 U-Boot # load mmc 0:1 ${loadaddr} uImage
@@ -180,15 +181,15 @@ U-Boot # run findfdt
 U-Boot # load mmc 0:1 ${fdtaddr} ${fdtfile}
 U-Boot # run mmcargs
 U-Boot # spl export fdt ${loadaddr} - ${fdtaddr}
-
+```
 This will print a number of lines and then end with something like:
    Using Device Tree in place at 80f80000, end 80f85928
    Using Device Tree in place at 80f80000, end 80f88928
 So then you:
 
-U-Boot # fatwrite mmc 0:1 0x80f80000 args 8928
+`U-Boot # fatwrite mmc 0:1 0x80f80000 args 8928`
 
-Falcon Mode: NAND
+### Falcon Mode: NAND
 =================
 
 In this case the additional data is written to another partition of the
@@ -196,10 +197,11 @@ NAND.  In this example we assume that the uImage and device tree to be are
 already located on the NAND somewhere (such as filesystem or mtd partition)
 along with a Falcon Mode aware MLO written to the correct locations for
 booting and mtdparts have been configured correctly for the board:
-
+```
 U-Boot # nand read ${loadaddr} kernel
 U-Boot # load nand rootfs ${fdtaddr} /boot/am335x-evm.dtb
 U-Boot # run nandargs
 U-Boot # spl export fdt ${loadaddr} - ${fdtaddr}
 U-Boot # nand erase.part u-boot-spl-os
 U-Boot # nand write ${fdtaddr} u-boot-spl-os
+```
